@@ -62,6 +62,10 @@
 /* test timeout */
 #define TIMEOUT 2
 
+#if PTHREAD_PRIO_INHERIT == 1
+#define _POSIX_THREAD_PRIO_INHERIT 1
+#endif
+
 /* determine if the C library supports Priority Inheritance mutexes */
 #if defined(_POSIX_THREAD_PRIO_INHERIT) && _POSIX_THREAD_PRIO_INHERIT != -1
 #define HAVE_PI_MUTEX 1
@@ -382,7 +386,12 @@ setup_thread_attr(pthread_attr_t * attr, struct sched_attr * sa,
 		     status);
 		return FAILURE;
 	}
-	status = pthread_attr_setaffinity_np(attr, sizeof(cpu_set_t), mask);
+	//status = pthread_attr_setaffinity_np(attr, sizeof(cpu_set_t), mask);
+	// build for musl libc
+	//status = pthread_setaffinity_np(0, sizeof(cpu_set_t), mask);
+	status = sched_setaffinity(0, sizeof(cpu_set_t), mask);
+	warn("May not set CPU affinity\n");
+
 	if (status) {
 		pi_error("setup_thread_attr: setting affinity attribute: 0x%x\n",
 		      status);

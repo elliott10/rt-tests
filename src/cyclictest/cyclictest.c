@@ -51,7 +51,8 @@
 
 #define ARRAY_SIZE(x) (sizeof(x) / sizeof((x)[0]))
 
-#define sigev_notify_thread_id _sigev_un._tid
+// build for musl libc
+// #define sigev_notify_thread_id _sigev_un._tid
 
 #ifdef __UCLIBC__
 #define MAKE_PROCESS_CPUCLOCK(pid, clock) \

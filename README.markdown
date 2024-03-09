@@ -9,6 +9,12 @@ This repository contains some programs that test various rt-linux features.
     sudo apt-get install build-essential libnuma-dev
     make
 
+#### Build in musl libc
+
+```
+make cyclictest NUMA=0 CROSS_COMPILE=riscv64-linux-musl-
+```
+
 ### Run tests
 
 To run one test thread per CPU or per CPU core, each thread on a separate
